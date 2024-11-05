@@ -34,16 +34,16 @@ def printMatrix(dogDB, peopleDB, adoptionMatrix):
 #    peopleInfo = list of lists of people information
 
 def getInfo(dogInfo, peopleInfo):
-    # Process Dog Data file
+    # Read dog data from DogData.txt
     file_dog_data = open("HW #2 DogData.txt", "r")
     for line in file_dog_data:
-        data = line.strip().split(";")
+        data = line.strip().split(';')
         dogInfo.append([data[0], data[1], int(data[2]), int(data[3]), data[4]])
 
-    # Process People Data file
+    # Read people data from PeopleData.txt
     file_people_data = open("HW #2 PeopleData.txt", "r")
     for line in file_people_data:
-        data = line.strip().split(";")
+        data = line.strip().split(';')
         if len(data) == 6:
             peopleInfo.append([data[0], data[1], int(data[2]), int(data[3]), data[4], data[5]])
         else:
@@ -62,12 +62,10 @@ def getInfo(dogInfo, peopleInfo):
 #    numPeopleWhoWillAdopt: count of the number of people who are willing to adopt each dog
 
 def potentialOwners(dogDB, peopleDB, adoptionMatrix, numDogsToAdopt, numPeopleWhoWillAdopt):
-    for j in range(len(dogDB)):
-        dog = dogDB[j]
+    for j, dog in enumerate(dogDB):
         match_counts = [0] * len(peopleDB)
-        for i in range(len(peopleDB)):
-            person = peopleDB[i]
-            print(f"\n>>> {dog[0]} is being matched to {person[0]}")
+        for i, person in enumerate(peopleDB):
+            print(f">>> {dog[0]} is being matched to {person[0]}")
             gender_match = person[1] == dog[1]
             age_match = person[2] <= dog[3] <= person[3]
             has_dog = person[4] == 'Y'
@@ -95,7 +93,7 @@ def potentialOwners(dogDB, peopleDB, adoptionMatrix, numDogsToAdopt, numPeopleWh
                 else:
                     print(f"{person[0]} already has a female dog, {dog[0]} is NOT a match for this family")
             
-            # Update adoption matrix
+            # Update adoption matrix and counts if match is found
             if match:
                 adoptionMatrix[i][j] = 1
                 numDogsToAdopt[i] += 1
@@ -104,30 +102,25 @@ def potentialOwners(dogDB, peopleDB, adoptionMatrix, numDogsToAdopt, numPeopleWh
             else:
                 match_counts[i] = 0
 
-        # Print the summary 
-        print(f"\n>>> done with {dog[0]}:", end=" ")
-        for count in match_counts:
-            print(count, end=" ")
-        print()
+        # Print summary for each dog
+        print(f">>> done with {dog[0]}: {' '.join(map(str, match_counts))}")
 
 # Main Program
 dogDB = []
 peopleDB = []
 getInfo(dogDB, peopleDB)
 
-# Print Dog Info
-print("\ndogInfo:")
+print("dogInfo:")
 print(dogDB[0])
 print(dogDB[1])
 print(dogDB[2])
 
-# Print People Info
 print("\npeopleInfo:")
 print(peopleDB[0])
 print(peopleDB[1])
 print(peopleDB[2])
 
-# Initialize databases to hold dog and people data
+# Initialize adoption matrix and counters
 adoptionMatrix = [[0] * len(dogDB) for _ in range(len(peopleDB))]
 numDogsToAdopt = [0] * len(peopleDB)
 numPeopleWhoWillAdopt = [0] * len(dogDB)

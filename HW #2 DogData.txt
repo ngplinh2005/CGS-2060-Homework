@@ -1,0 +1,3 @@
+Rover;M;38;3;Brown
+Missy;F;35;4;White
+Hank;M;52;6;Brindle
